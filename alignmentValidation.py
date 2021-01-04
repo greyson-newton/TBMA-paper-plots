@@ -210,8 +210,7 @@ if options.fit: allOptions += " --fit"
 if options.median: allOptions += " --median"
 if options.diagnostic: allOptions += " --diagnostic"
 print sys.argv[0]+" "+allOptions
-#DO_MAP=True
-#DO_SEGDIFF=True
+
 
 QUICKTESTN=10000
 
@@ -498,6 +497,7 @@ def doMapPlotsCSC(csc_basedir, tfiles_plotting):
   Interface: may be arranged into two station(1 .. 4) maps for both endcaps
   It could be incorporated into an EXTENDED general CSC chambers map (extended by adding an
   identifier "ALL" in column3 for ring number)."""
+
   for endcap in CSC_TYPES:
     for station in endcap[2]:
       for ring in station[2]:
@@ -508,10 +508,13 @@ def doMapPlotsCSC(csc_basedir, tfiles_plotting):
         mapplot(tfiles_plotting, label, "x", window=15., title=htitle, fitsine=True,fitpeaks=True, peaksbins=2)
         #mapplot(tfiles_plotting, label, "x", window=15., title=htitle, fitsine=True)
         c1.SaveAs(pdir+'map_CSCvsphi_x.png')
+        c1.SaveAs(pdir + 'map_CSCvsphi_x.pdf')
         mapplot(tfiles_plotting, label, "dxdz", window=15., title=htitle, peaksbins=2)
         c1.SaveAs(pdir+'map_CSCvsphi_dxdz.png')
+        c1.SaveAs(pdir + 'map_CSCvsphi_dxdz.pdf')
 
   saveTestResultsMap(options.runLabel)
+
   qcount = 0
   for endcap in CSC_TYPES:
     for station in endcap[2]:

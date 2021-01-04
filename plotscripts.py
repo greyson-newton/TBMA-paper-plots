@@ -91,7 +91,7 @@ def setTDRStyle():
   tdrStyle.SetCanvasBorderMode(0)
   tdrStyle.SetCanvasColor(ROOT.kWhite)
   tdrStyle.SetCanvasDefH(600) #Height of canvas
-  tdrStyle.SetCanvasDefW(600) #Width of canvas
+  tdrStyle.SetCanvasDefW(800) #Width of canvas
   tdrStyle.SetCanvasDefX(0)   #POsition on screen
   tdrStyle.SetCanvasDefY(0)
 
@@ -157,7 +157,7 @@ def setTDRStyle():
   # tdrStyle.SetStatY(Float_t y = 0)
 
 # Margins:
-  tdrStyle.SetPadTopMargin(0.05)
+  tdrStyle.SetPadTopMargin(0.07)
   tdrStyle.SetPadBottomMargin(0.13)
   tdrStyle.SetPadLeftMargin(0.1)
   tdrStyle.SetPadRightMargin(0.13)
@@ -244,6 +244,16 @@ def set_palette(name=None, ncontours=999):
         red   = [1.00, 0.84, 0.61, 0.34, 0.00]
         green = [1.00, 0.84, 0.61, 0.34, 0.00]
         blue  = [1.00, 1.00, 1.00, 1.00, 1.00]
+    elif name == "greens":
+        stops = [0.00, 0.34, 0.61, 0.84, 1.00]
+        red   = [1.00, 0.84, 0.61, 0.34, 0.00]
+        green = [1.00, 1.00, 1.00, 1.00, 1.00]
+        blue  = [1.00, 0.84, 0.61, 0.34, 0.00]
+    elif name == "yellows":
+        stops = [0.00, 0.34, 0.61, 0.84, 1.00]
+        red   = [1.00, 1.00, 1.00, 1.00, 1.00]
+        green = [1.00, 1.00, 1.00, 1.00, 1.00]
+        blue  = [1.00, 0.96, 0.77, 0.4, 0.00]
     elif name == "reds":
         stops = [0.00, 0.34, 0.61, 0.84, 1.00]
         red   = [1.00, 1.00, 1.00, 1.00, 1.00]
@@ -267,17 +277,16 @@ def set_palette(name=None, ncontours=999):
         red   = [0.50, 1.00, 1.00, 1.00]
         green = [0.00, 0.00, 1.00, 1.00]
         blue  = [0.00, 0.00, 0.00, 0.20]
-    elif name == "yellow":
-        stops = [0.00, 0.20, 0.80, 1.00]
-        red   = [1.00, 0.00, 0.00, 0.00]
-        green = [0.00, 1.00, 0.00, 0.00]
-        blue  = [0.00, 0.00, 0.20, 0.00]
     else:
-        # default palette, looks cool
+        # default palette
         stops = [0.00, 0.34, 0.61, 0.84, 1.00]
-        red   = [0.00, 0.00, 0.87, 1.00, 0.51]
-        green = [0.00, 0.81, 1.00, 0.20, 0.00]
-        blue  = [0.51, 1.00, 0.12, 0.00, 0.00]
+        red   = [1.00, 1.00, 1.00, 1.00, 1.00]
+        green = [1.00, 1.00, 1.00, 1.00, 1.00]
+        blue  = [1.00, 0.84, 0.61, 0.34, 0.00]
+#        stops = [0.00, 0.34, 0.61, 0.84, 1.00]
+#        red   = [0.00, 0.00, 0.87, 1.00, 0.51]
+#        green = [0.00, 0.81, 1.00, 0.20, 0.00]
+#        blue  = [0.51, 1.00, 0.12, 0.00, 0.00]
 
     s = array.array('d', stops)
     r = array.array('d', red)
@@ -288,7 +297,7 @@ def set_palette(name=None, ncontours=999):
     ROOT.TColor.CreateGradientColorTable(npoints, s, r, g, b, ncontours)
     ROOT.gStyle.SetNumberContours(ncontours)
 
-set_palette("yellow")
+set_palette()
 
 ######################################################################################################
 ## sector phi edges in: me11 me12 me13 me14 me21 me22 me31 me32 me41 me42 mb1 mb2 mb3 mb4
@@ -481,13 +490,13 @@ def getReportByPostalAddress(postal_address, report):
 ######################################################################################################
 
 def DBMC(database, reports, window=10., windows=None, selection=None, phi=False, 
-         color=ROOT.kYellow-8, style=1, bins=50, normalized=False, getvalues=False, name="", canvas=None, reportdiff=False, inlog=True):
+         color=ROOT.kBlue-8, style=1, bins=50, normalized=False, getvalues=False, name="", canvas=None, reportdiff=False, inlog=True):
     return DBdiff(database, None, reports, None, window, windows, selection, phi, color, style, bins, normalized, getvalues,
                   name, canvas, reportdiff, inlog)
 
 
 def DBdiff(database1, database2, reports1, reports2, 
-           window=10., windows=None, selection=None, phi=False, color=ROOT.kYellow-8,
+           window=10., windows=None, selection=None, phi=False, color=ROOT.kBlue-8,
            style=1, bins=50, normalized=False, getvalues=False, name="tmp", canvas=None, reportdiff=False, inlog=False ):
 
     tdrStyle.SetOptStat("emrou")
@@ -674,7 +683,7 @@ def DBdiff(database1, database2, reports1, reports2,
         fphiz = ROOT.TF1("fphiz", "%g * exp(-x**2/2.)/sqrt(2.*3.1415926)" % (hphiz.GetEntries()*2.*window/bins), -window, window)
         for f in fx, fy, fz, fphix, fphiy, fphiz:
             f.SetLineWidth(2)
-            f.SetLineColor(ROOT.kYellow)
+            f.SetLineColor(ROOT.kBlue)
         for h, f in (hx, fx), (hy, fy), (hz, fz), (hphix, fphix), (hphiy, fphiy), (hphiz, fphiz):
             h.SetAxisRange(0, 1.1*max(h.GetMaximum(), f.GetMaximum()), "Y")
         
@@ -1448,7 +1457,8 @@ def createPeaksProfile(the2d, rebin=1):
 ######################################################################################################
 
 def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title="", 
-            widebins=False, fitsine=False, fitline=False, reset_palette=False, fitsawteeth=False, fitpeaks=False, peaksbins=1, fixfitpars={}, **args):
+            widebins=False, fitsine=False, fitline=False, reset_palette=False, fitsawteeth=False,
+            fitpeaks=False, peaksbins=1, fixfitpars={}, **args):
     tdrStyle.SetOptTitle(1)
     tdrStyle.SetTitleBorderSize(0)
     tdrStyle.SetOptStat(0)
@@ -1460,7 +1470,7 @@ def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title
     c1.Clear()
     c1.ResetAttPad()
     
-    if reset_palette: set_palette("blues")
+    if reset_palette: set_palette("yellows")  # blues
     global hist, hist2d, hist2dweight, tline1, tline2, tline3
     
     if fitsine or fitsawteeth:
@@ -1543,8 +1553,8 @@ def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title
 
     hist.SetAxisRange(-window, window, "Y")
     if abscissa is not None: hist.SetAxisRange(abscissa[0], abscissa[1], "X")
-    hist.SetMarkerStyle(20)
-    hist.SetMarkerSize(0.75)
+    hist.SetMarkerStyle(22) #right-side up triangle
+    hist.SetMarkerSize(1) #0.75
     hist.GetXaxis().CenterTitle()
     hist.GetYaxis().CenterTitle()
     hist.GetYaxis().SetTitleOffset(0.75)
@@ -1562,15 +1572,15 @@ def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title
     if "CSC" in name:
         if param == "x": hist.SetYTitle("r#phi residual (mm)")
         if param == "dxdz": hist.SetYTitle("d(r#phi)/dz residual (mrad)")
-    hist.SetMarkerColor(ROOT.kBlack)
-    hist.SetLineColor(ROOT.kBlack)
+    hist.SetMarkerColor(ROOT.kBlue)  #kBlack
+    hist.SetLineColor(ROOT.kBlue)    #kBlack
     hist.Draw()
     hist2d.Draw("colzsame")
     if widebins: hist.Draw("samee1")
     else: hist.Draw("same")
 
-    hpeaks.SetMarkerStyle(20)
-    hpeaks.SetMarkerSize(0.9)
+    hpeaks.SetMarkerStyle(23)  #upside-down triangle
+    hpeaks.SetMarkerSize(1)
     hpeaks.SetMarkerColor(ROOT.kRed)
     hpeaks.SetLineColor(ROOT.kRed)
     hpeaks.SetLineWidth(2)
@@ -1583,8 +1593,8 @@ def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title
           f = ROOT.TF1("f", "[0] + [1]*sin(x) + [2]*cos(x)", -pi/180.*5., pi*(2.-5./180.))
         else:
           f = ROOT.TF1("f", "[0] + [1]*sin(x) + [2]*cos(x)", -pi, pi)
-        f.SetLineColor(ROOT.kRed)
-        f.SetLineWidth(2)
+        f.SetLineColor(ROOT.kMagenta)
+        f.SetLineWidth(4)
         if len(fixfitpars)>0:
           for fpar in fixfitpars.keys():
             f.FixParameter(fpar, fixfitpars[fpar])
@@ -1603,40 +1613,19 @@ def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title
         # 'phi' coefficienct will be updated further for CSC
         MAP_RESULTS_FITSIN[id] = {'a':fitsine_const, 'phi':fitsine_const, 'sin': fitsine_sin, 'cos': fitsine_cos, 'chi2': fitsine_chi2, 'ndf': fitsine_ndf}
         f.Draw("same")
+        global fitsine_ttext, fitsine_etext
         text_xposition = -1.
         if 'CSC' in name: text_xposition = 2.
-        global cmsText, lumiText
-	global extraText
-
-        t = ROOT.gPad.GetTopMargin()
-        cmsTextFont =61 ;cmsTextSize=0.75
-	extraTextFont=52;extraTextSize=0.70
-        lumiTextFont=61 ;lumiTextSize=0.75
-
-	
-        cmsText     = ROOT.TLatex(0.0,1.05*window,"CMS")
-	extraText   = ROOT.TLatex(0.52,1.049*window,"Preliminary")    
-        lumiText    = ROOT.TLatex(5.4,1.05*window,"(13 TeV)") 
-	cmsText.SetTextAlign(12);extraText.SetTextAlign(12);lumiText.SetTextAlign(12)
-        cmsText.SetTextColor(ROOT.kBlack);cmsText.SetTextFont(cmsTextFont);cmsText.SetTextSize(cmsTextSize*t)
-	extraText.SetTextColor(ROOT.kBlack);extraText.SetTextFont(extraTextFont);extraText.SetTextSize(extraTextSize*t)
-        lumiText.SetTextColor(ROOT.kBlack);lumiText.SetTextFont(lumiTextFont);lumiText.SetTextSize(lumiTextSize*t)
-        lumiText.Draw();cmsText.Draw();extraText.Draw()
-        ROOT.gPad.Update()
-
-
-        # additional estim
-
         fitsine_ttext = ROOT.TLatex(text_xposition, 0.8*window, 
                 "%+.3f %+.3f sin#phi %+.3f cos#phi" % (fitsine_const[0], fitsine_sin[0], fitsine_cos[0]))
-        fitsine_ttext.SetTextColor(ROOT.kRed)
+        fitsine_ttext.SetTextColor(ROOT.kMagenta)
         fitsine_ttext.SetTextSize(0.05)
-       # fitsine_ttext.Draw()
+        fitsine_ttext.Draw()
         fitsine_etext = ROOT.TLatex(text_xposition, 0.70*window, 
-                " #pm%.3f    #pm%.3f            #pm%.3f" % (fitsine_const[1], fitsine_sin[1], fitsine_cos[1]))
-        fitsine_etext.SetTextColor(ROOT.kRed)
+                "#pm%.3f #pm%.3f      #pm%.3f" % (fitsine_const[1], fitsine_sin[1], fitsine_cos[1]))
+        fitsine_etext.SetTextColor(ROOT.kMagenta)
         fitsine_etext.SetTextSize(0.045)
-        #fitsine_etext.Draw()
+        fitsine_etext.Draw()
 
         # additional estimate of phiz ring rotation from 1d distribution
         if 'CSC' in name and add1d:
@@ -1660,15 +1649,19 @@ def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title
           global ttex_sine_, ttex_sine, ttex_1d_, ttex_1d
           postal_address = idToPostalAddress(id+'/01')
           ttex_sine_ = ROOT.TLatex(0, 0.8*window,"#Delta#phi_{z}^{sine} (mrad):")
-         # ttex_sine_.SetTextColor(ROOT.kRed); ttex_sine_.SetTextSize(0.04); ttex_sine_.Draw()
+          ttex_sine_.SetTextColor(ROOT.kMagenta); ttex_sine_.SetTextSize(0.04);
+          ttex_sine_.Draw()
           ttex_sine = ROOT.TLatex(0, 0.7*window,"   %+.3f#pm%.3f" %
                                   (-100*fitsine_const[0]/signConventions[postal_address][3], 
                                    100*fitsine_const[1]/signConventions[postal_address][3]))
-         # ttex_sine.SetTextColor(ROOT.kRed); ttex_sine.SetTextSize(0.04); ttex_sine.Draw()
+          ttex_sine.SetTextColor(ROOT.kMagenta); ttex_sine.SetTextSize(0.04);
+          ttex_sine.Draw()
           ttex_1d_ = ROOT.TLatex(0, 0.6*window,"#Delta#phi_{z}^{phi} (mrad):")
-         # ttex_1d_.SetTextColor(ROOT.kRed); ttex_1d_.SetTextSize(0.04); ttex_1d_.Draw()
+          ttex_1d_.SetTextColor(ROOT.kMagenta); ttex_1d_.SetTextSize(0.04);
+          ttex_1d_.Draw()
           ttex_1d = ROOT.TLatex(0, 0.5*window,"   %+.3f#pm%.3f" % (-dphiz, ephiz))
-         # ttex_1d.SetTextColor(ROOT.kRed); ttex_1d.SetTextSize(0.04); ttex_1d.Draw()
+          ttex_1d.SetTextColor(ROOT.kMagenta); ttex_1d.SetTextSize(0.04);
+          ttex_1d.Draw()
           ROOT.gPad.Update()
 
     if fitline:
@@ -1836,7 +1829,7 @@ def curvatureplot(tfiles, name, param, mode="from2d", window=15., widebins=False
     tdrStyle.SetTitleFontSize(0.05)
 
     c1.Clear()
-    if reset_palette: set_palette("blues")
+    if reset_palette: set_palette("yellows")  #blues
     global hist, histCOPY, hist2d, tline1, tline2, tline3, tline4, tline5
 
     hdir = "AlignmentMonitorMuonVsCurvature/iter1/"
@@ -1959,8 +1952,8 @@ def curvatureplot(tfiles, name, param, mode="from2d", window=15., widebins=False
     if param == "pterr": hist2d.SetYTitle("#Deltap_{T}/p_{T} (%)")
     if param == "curverr": hist2d.SetYTitle("#Deltaq/p_{T} (c/GeV)")
     hist2d.Draw("colz")
-    hist.SetMarkerColor(ROOT.kBlack)
-    hist.SetLineColor(ROOT.kBlack)
+    hist.SetMarkerColor(ROOT.kBlue)  # kBlack
+    hist.SetLineColor(ROOT.kBlue)    # kBlack
     hist.Draw("same")
     #histCOPY = hist.Clone()
     #histCOPY.SetXTitle("")
@@ -2033,9 +2026,9 @@ def curvatureDTsummary(tfiles, window=15., pdgSfactor=False):
             array.array("d", [0.]*len(phis[2])), array.array("d", differrs[2]))
 
     gm2.SetMarkerStyle(21); gm2.SetMarkerColor(ROOT.kRed); gm2.SetLineColor(ROOT.kRed)
-    gm1.SetMarkerStyle(22); gm1.SetMarkerColor(ROOT.kYellow); gm1.SetLineColor(ROOT.kYellow)
+    gm1.SetMarkerStyle(22); gm1.SetMarkerColor(ROOT.kBlue); gm1.SetLineColor(ROOT.kBlue)
     gz.SetMarkerStyle(3); gz.SetMarkerColor(ROOT.kBlack); gz.SetLineColor(ROOT.kBlack)
-    gp1.SetMarkerStyle(26); gp1.SetMarkerColor(ROOT.kYellow); gp1.SetLineColor(ROOT.kYellow)
+    gp1.SetMarkerStyle(26); gp1.SetMarkerColor(ROOT.kBlue); gp1.SetLineColor(ROOT.kBlue)
     gp2.SetMarkerStyle(25); gp2.SetMarkerColor(ROOT.kRed); gp2.SetLineColor(ROOT.kRed)
 
     h.Draw()
@@ -3260,7 +3253,7 @@ def segdiffvsphi_xalign(tfiles, wheel, window=10.):
         gtemp_12.SetMarkerColor(ROOT.kRed);  gtemp_12.SetLineColor(ROOT.kRed)
     if len(gtemp_21_phi) > 0:
         gtemp_21.SetMarkerStyle(21);  gtemp_21.SetMarkerSize(1.5);  
-        gtemp_21.SetMarkerColor(ROOT.kYellow);  gtemp_21.SetLineColor(ROOT.kYellow)
+        gtemp_21.SetMarkerColor(ROOT.kBlue);  gtemp_21.SetLineColor(ROOT.kBlue)
     
     htemp.SetTitle("Wheel %+d" % wheel)
     htemp.SetAxisRange(-window, window, "Y")
@@ -3298,7 +3291,7 @@ def segdiffvsphi_xalign(tfiles, wheel, window=10.):
     f_11.SetLineColor(ROOT.kRed)
     f_11.SetLineWidth(2)
     f_21 = ROOT.TF1("f21", "[0] + [1]*sin(x) + [2]*cos(x)", -pi, pi)
-    f_21.SetLineColor(ROOT.kYellow)
+    f_21.SetLineColor(ROOT.kBlue)
     f_21.SetLineWidth(2)
     if len(gtemp_11_phi) > 0:
       gtemp_11.Fit(f_11,"")
@@ -3321,7 +3314,7 @@ def segdiffvsphi_xalign(tfiles, wheel, window=10.):
       f_21_txt = ROOT.TLatex(-2.9, -0.9*window, "#Deltax=%.2f#pm%.2f mm   #Deltay=%.2f#pm%.2f mm   #Delta#phi_{z}=%.2f#pm%.2f mrad" % (
                              -f_21.GetParameter(1), f_21.GetParError(1), f_21.GetParameter(2), f_21.GetParError(2), -f_21.GetParameter(0)/rdt*1000, f_21.GetParError(0)/rdt*1000))
       f_21_txt.SetTextSize(0.028)
-      f_21_txt.SetTextColor(ROOT.kYellow)
+      f_21_txt.SetTextColor(ROOT.kBlue)
       f_21_txt.Draw()
 
 ##################################################################################
@@ -3408,9 +3401,9 @@ def segdiffvsphi(tfiles, reports, component, wheel, window=5., excludesectors=()
 
     if len(gtemp_12_phi) > 0:
         gtemp_12.SetMarkerStyle(20);  gtemp_12.SetMarkerSize(1.);  
-        gtemp_12.SetMarkerColor(ROOT.kYellow);  gtemp_12.SetLineColor(ROOT.kYellow)
+        gtemp_12.SetMarkerColor(ROOT.kBlue);  gtemp_12.SetLineColor(ROOT.kBlue)
         gtemp2_12.SetMarkerStyle(24); gtemp2_12.SetMarkerSize(1.); 
-        gtemp2_12.SetMarkerColor(ROOT.kYellow); gtemp2_12.SetLineColor(ROOT.kYellow)
+        gtemp2_12.SetMarkerColor(ROOT.kBlue); gtemp2_12.SetLineColor(ROOT.kBlue)
     if len(gtemp_23_phi) > 0:
         gtemp_23.SetMarkerStyle(21);  gtemp_23.SetMarkerSize(1.);  
         gtemp_23.SetMarkerColor(ROOT.kRed);   gtemp_23.SetLineColor(ROOT.kRed)
@@ -3529,9 +3522,9 @@ def segdiffvsphicsc(tfiles, component, pair, window=5., **args):
 
     if len(gtemp_1_phi) > 0:
         gtemp_1.SetMarkerStyle(20);  gtemp_1.SetMarkerSize(1.);  
-        gtemp_1.SetMarkerColor(ROOT.kYellow);  gtemp_1.SetLineColor(ROOT.kYellow)
+        gtemp_1.SetMarkerColor(ROOT.kBlue);  gtemp_1.SetLineColor(ROOT.kBlue)
         gtemp2_1.SetMarkerStyle(24); gtemp2_1.SetMarkerSize(1.); 
-        gtemp2_1.SetMarkerColor(ROOT.kYellow); gtemp2_1.SetLineColor(ROOT.kYellow)
+        gtemp2_1.SetMarkerColor(ROOT.kBlue); gtemp2_1.SetLineColor(ROOT.kBlue)
     if len(gtemp_2_phi) > 0:
         gtemp_2.SetMarkerStyle(21);  gtemp_2.SetMarkerSize(1.);  
         gtemp_2.SetMarkerColor(ROOT.kRed);  gtemp_2.SetLineColor(ROOT.kRed)
@@ -3757,7 +3750,7 @@ def corrections2D(reportsX=None, reportsY=None, geometry0=None, geometryX=None, 
     g = ROOT.TGraph(len(a1), a1, a2)
     g.SetMarkerStyle(5)
     g.SetMarkerSize(0.3)
-    g.SetMarkerColor(ROOT.kYellow)
+    g.SetMarkerColor(ROOT.kBlue)
     graphs.append(g)
 
     pcas[i].MakePrincipals()
@@ -3774,7 +3767,7 @@ def corrections2D(reportsX=None, reportsY=None, geometry0=None, geometryX=None, 
     texr = ROOT.TLatex(0.17,0.80, "r = %.02g" % r)
     for t in texr, texrms:
       t.SetNDC(1)
-      t.SetTextColor(ROOT.kYellow)
+      t.SetTextColor(ROOT.kBlue)
       t.SetTextSize(0.053)
       t.Draw()
       texs.append(t)
@@ -3790,4 +3783,3 @@ def corrections2D(reportsX=None, reportsY=None, geometry0=None, geometryX=None, 
 
   #return hx, hy, hphiy, hphiz, pca_x, pca_y, pca_phiy, pca_phiz
   return aaa
-
