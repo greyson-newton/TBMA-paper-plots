@@ -280,13 +280,14 @@ def set_palette(name=None, ncontours=999):
     else:
         # default palette
         stops = [0.00, 0.34, 0.61, 0.84, 1.00]
-        red   = [1.00, 1.00, 1.00, 1.00, 1.00]
-        green = [1.00, 1.00, 1.00, 1.00, 1.00]
-        blue  = [1.00, 0.84, 0.61, 0.34, 0.00]
+        red   = [0.00, 0.00, 0.87, 1.00, 0.51]
+        green = [0.00, 0.81, 1.00, 0.20, 0.00]
+        blue  = [0.51, 1.00, 0.12, 0.00, 0.00]
+
 #        stops = [0.00, 0.34, 0.61, 0.84, 1.00]
-#        red   = [0.00, 0.00, 0.87, 1.00, 0.51]
-#        green = [0.00, 0.81, 1.00, 0.20, 0.00]
-#        blue  = [0.51, 1.00, 0.12, 0.00, 0.00]
+#        red   = [1.00, 1.00, 1.00, 1.00, 1.00]
+ #       green = [1.00, 1.00, 1.00, 1.00, 1.00]
+ #       blue  = [1.00, 0.84, 0.61, 0.34, 0.00]
 
     s = array.array('d', stops)
     r = array.array('d', red)
@@ -1470,7 +1471,7 @@ def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title
     c1.Clear()
     c1.ResetAttPad()
     
-    if reset_palette: set_palette("yellows")  # blues
+    if reset_palette: set_palette("blues")  # blues
     global hist, hist2d, hist2dweight, tline1, tline2, tline3
     
     if fitsine or fitsawteeth:
@@ -1613,19 +1614,27 @@ def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title
         # 'phi' coefficienct will be updated further for CSC
         MAP_RESULTS_FITSIN[id] = {'a':fitsine_const, 'phi':fitsine_const, 'sin': fitsine_sin, 'cos': fitsine_cos, 'chi2': fitsine_chi2, 'ndf': fitsine_ndf}
         f.Draw("same")
-        global fitsine_ttext, fitsine_etext
         text_xposition = -1.
         if 'CSC' in name: text_xposition = 2.
-        fitsine_ttext = ROOT.TLatex(text_xposition, 0.8*window, 
-                "%+.3f %+.3f sin#phi %+.3f cos#phi" % (fitsine_const[0], fitsine_sin[0], fitsine_cos[0]))
-        fitsine_ttext.SetTextColor(ROOT.kMagenta)
-        fitsine_ttext.SetTextSize(0.05)
-        fitsine_ttext.Draw()
-        fitsine_etext = ROOT.TLatex(text_xposition, 0.70*window, 
-                "#pm%.3f #pm%.3f      #pm%.3f" % (fitsine_const[1], fitsine_sin[1], fitsine_cos[1]))
-        fitsine_etext.SetTextColor(ROOT.kMagenta)
-        fitsine_etext.SetTextSize(0.045)
-        fitsine_etext.Draw()
+        global cmsText, extraText, lumiText
+
+        t = ROOT.gPad.GetTopMargin()
+        cmsTextFont =61 ;cmsTextSize=0.75
+        extraTextFont=52;extraTextSize=0.70
+        lumiTextFont=61 ;lumiTextSize=0.75
+  
+        cmsText     = ROOT.TLatex(-0.3,1.15*window,"CMS")
+        extraText   = ROOT.TLatex(0.52,1.049*window,"Preliminary")    
+        lumiText    = ROOT.TLatex(4.0,1.1*window,"(13 TeV)") 
+
+        cmsText.SetTextAlign(12);extraText.SetTextAlign(12);lumiText.SetTextAlign(12)
+        cmsText.SetTextSize(cmsTextSize*t);extraText.SetTextSize(extraTextSize*t);lumiText.SetTextSize(lumiTextSize*t)
+        cmsText.SetTextColor(ROOT.kBlack);extraText.SetTextColor(ROOT.kBlack);lumiText.SetTextColor(ROOT.kBlack)
+        cmsText.SetTextFont(cmsTextFont);extraText.SetTextFont(extraTextFont);lumiText.SetTextFont(lumiTextFont);
+
+        lumiText.Draw();cmsText.Draw();extraText.Draw()
+
+        ROOT.gPad.Update()
 
         # additional estimate of phiz ring rotation from 1d distribution
         if 'CSC' in name and add1d:
@@ -1650,19 +1659,19 @@ def mapplot(tfiles, name, param, mode="from2d", window=10., abscissa=None, title
           postal_address = idToPostalAddress(id+'/01')
           ttex_sine_ = ROOT.TLatex(0, 0.8*window,"#Delta#phi_{z}^{sine} (mrad):")
           ttex_sine_.SetTextColor(ROOT.kMagenta); ttex_sine_.SetTextSize(0.04);
-          ttex_sine_.Draw()
+          #ttex_sine_.Draw()
           ttex_sine = ROOT.TLatex(0, 0.7*window,"   %+.3f#pm%.3f" %
                                   (-100*fitsine_const[0]/signConventions[postal_address][3], 
                                    100*fitsine_const[1]/signConventions[postal_address][3]))
           ttex_sine.SetTextColor(ROOT.kMagenta); ttex_sine.SetTextSize(0.04);
-          ttex_sine.Draw()
+          #ttex_sine.Draw()
           ttex_1d_ = ROOT.TLatex(0, 0.6*window,"#Delta#phi_{z}^{phi} (mrad):")
           ttex_1d_.SetTextColor(ROOT.kMagenta); ttex_1d_.SetTextSize(0.04);
-          ttex_1d_.Draw()
+          #ttex_1d_.Draw()
           ttex_1d = ROOT.TLatex(0, 0.5*window,"   %+.3f#pm%.3f" % (-dphiz, ephiz))
           ttex_1d.SetTextColor(ROOT.kMagenta); ttex_1d.SetTextSize(0.04);
-          ttex_1d.Draw()
-          ROOT.gPad.Update()
+          #ttex_1d.Draw()
+          #ROOT.gPad.Update()
 
     if fitline:
         f = ROOT.TF1("f", "[0] + [1]*x", -1000., 1000.)
@@ -1829,7 +1838,7 @@ def curvatureplot(tfiles, name, param, mode="from2d", window=15., widebins=False
     tdrStyle.SetTitleFontSize(0.05)
 
     c1.Clear()
-    if reset_palette: set_palette("yellows")  #blues
+    if reset_palette: set_palette("blues")  #blues
     global hist, histCOPY, hist2d, tline1, tline2, tline3, tline4, tline5
 
     hdir = "AlignmentMonitorMuonVsCurvature/iter1/"
@@ -1952,8 +1961,8 @@ def curvatureplot(tfiles, name, param, mode="from2d", window=15., widebins=False
     if param == "pterr": hist2d.SetYTitle("#Deltap_{T}/p_{T} (%)")
     if param == "curverr": hist2d.SetYTitle("#Deltaq/p_{T} (c/GeV)")
     hist2d.Draw("colz")
-    hist.SetMarkerColor(ROOT.kBlue)  # kBlack
-    hist.SetLineColor(ROOT.kBlue)    # kBlack
+    hist.SetMarkerColor(ROOT.kBlack)  # kBlue
+    hist.SetLineColor(ROOT.kBlack)    # kBluek
     hist.Draw("same")
     #histCOPY = hist.Clone()
     #histCOPY.SetXTitle("")

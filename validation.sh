@@ -5,11 +5,11 @@ export ALIGNMENT_CAFDIR=`pwd`
 mkdir files
 mkdir out
 
-cd /afs/cern.ch/work/a/adthomps/public/CMSSW_10_1_0/src
+cd /afs/cern.ch/work/g/grnewton/public/cmsPlots/CMSSW_11_1_4/src/
 eval `scramv1 run -sh`
 ALIGNMENT_AFSDIR=`pwd`
 ALIGNMENT_ITERATION=3
-ALIGNMENT_MAPPLOTS=None
+ALIGNMENT_MAPPLOTS=True
 ALIGNMENT_SEGDIFFPLOTS=None
 ALIGNMENT_CURVATUREPLOTS=None
 ALIGNMENT_EXTRAPLOTS=True

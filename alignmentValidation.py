@@ -214,7 +214,11 @@ print sys.argv[0]+" "+allOptions
 
 QUICKTESTN=10000
 
-
+DO_MAP = True
+DO_SEGDIFF = False
+DO_CURVATURE = False
+DO_FIT = False
+DO_MEDIAN = False
 
 ######################################################
 
